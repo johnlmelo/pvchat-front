@@ -1,6 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
-
-import openSocket from "socket.io-client";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 
 import {
   Button,
@@ -10,7 +8,8 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TableRow
+  TableRow,
+  Typography // Importar Typography do Material-UI
 } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -27,6 +26,10 @@ import { DeleteOutline, Edit } from "@material-ui/icons";
 import PromptModal from "../../components/PromptModal";
 import { toast } from "react-toastify";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import { AuthContext } from "../../context/Auth/AuthContext";
+import usePlans from "../../hooks/usePlans";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { SocketContext } from "../../context/Socket/SocketContext";
 
 const useStyles = makeStyles((theme) => ({
   mainPaper: {
@@ -39,6 +42,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+  },
+  // Adicione um estilo para a box vermelha
+  redBox: {
+    backgroundColor: "#ffcccc", // Definindo a cor de fundo vermelha
+    padding: theme.spacing(2), // Adicionando um espaçamento interno
+    marginBottom: theme.spacing(2), // Adicionando margem inferior para separar do conteúdo abaixo
   },
 }));
 
@@ -94,6 +103,26 @@ const Prompts = () => {
   const [promptModalOpen, setPromptModalOpen] = useState(false);
   const [selectedPrompt, setSelectedPrompt] = useState(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const { user } = useContext(AuthContext);
+  const { getPlanCompany } = usePlans();
+  const history = useHistory();
+  const companyId = user.companyId;
+
+  const socketManager = useContext(SocketContext);
+
+  useEffect(() => {
+    async function fetchData() {
+      const planConfigs = await getPlanCompany(undefined, companyId);
+      if (!planConfigs.plan.useOpenAi) {
+        toast.error("Esta empresa não possui permissão para acessar essa página! Estamos lhe redirecionando.");
+        setTimeout(() => {
+          history.push(`/`)
+        }, 1000);
+      }
+    }
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -111,9 +140,9 @@ const Prompts = () => {
   }, []);
 
   useEffect(() => {
-    const socket = openSocket(process.env.REACT_APP_BACKEND_URL);
+    const socket = socketManager.getSocket(companyId);
 
-    socket.on("prompt", (data) => {
+    socket.on(`company-${companyId}-prompt`, (data) => {
       if (data.action === "update" || data.action === "create") {
         dispatch({ type: "UPDATE_PROMPTS", payload: data.prompt });
       }
@@ -126,7 +155,7 @@ const Prompts = () => {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [companyId, socketManager]);
 
   const handleOpenPromptModal = () => {
     setPromptModalOpen(true);
@@ -160,6 +189,8 @@ const Prompts = () => {
 
   return (
     <MainContainer>
+   
+
       <ConfirmationModal
         title={
           selectedPrompt &&
@@ -201,7 +232,7 @@ const Prompts = () => {
               </TableCell>
               <TableCell align="left">
                 {i18n.t("prompts.table.max_tokens")}
-              </TableCell> 
+              </TableCell>
               <TableCell align="center">
                 {i18n.t("prompts.table.actions")}
               </TableCell>

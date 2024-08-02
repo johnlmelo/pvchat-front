@@ -93,17 +93,17 @@ export default function Options(props) {
   const [loadingCheckMsgIsGroup, setCheckMsgIsGroup] = useState(false);
 
 
-  const [ipixcType, setIpIxcType] = useState("");
-  const [loadingIpIxcType, setLoadingIpIxcType] = useState(false);
-  const [tokenixcType, setTokenIxcType] = useState("");
-  const [loadingTokenIxcType, setLoadingTokenIxcType] = useState(false);
+  //const [ipixcType, setIpIxcType] = useState("");
+  //const [loadingIpIxcType, setLoadingIpIxcType] = useState(false);
+  //const [tokenixcType, setTokenIxcType] = useState("");
+  //const [loadingTokenIxcType, setLoadingTokenIxcType] = useState(false);
 
-  const [ipmkauthType, setIpMkauthType] = useState("");
-  const [loadingIpMkauthType, setLoadingIpMkauthType] = useState(false);
-  const [clientidmkauthType, setClientIdMkauthType] = useState("");
-  const [loadingClientIdMkauthType, setLoadingClientIdMkauthType] = useState(false);
-  const [clientsecretmkauthType, setClientSecrectMkauthType] = useState("");
-  const [loadingClientSecrectMkauthType, setLoadingClientSecrectMkauthType] = useState(false);
+  //const [ipmkauthType, setIpMkauthType] = useState("");
+  //const [loadingIpMkauthType, setLoadingIpMkauthType] = useState(false);
+  //const [clientidmkauthType, setClientIdMkauthType] = useState("");
+  //const [loadingClientIdMkauthType, setLoadingClientIdMkauthType] = useState(false);
+  //const [clientsecretmkauthType, setClientSecrectMkauthType] = useState("");
+  //const [loadingClientSecrectMkauthType, setLoadingClientSecrectMkauthType] = useState(false);
 
   const [asaasType, setAsaasType] = useState("");
   const [loadingAsaasType, setLoadingAsaasType] = useState(false);
@@ -115,6 +115,9 @@ export default function Options(props) {
   
   const [SettingsTransfTicket, setSettingsTransfTicket] = useState("disabled");
   const [loadingSettingsTransfTicket, setLoadingSettingsTransfTicket] = useState(false);
+  
+  const [sendGreetingMessageOneQueues, setSendGreetingMessageOneQueues] = useState("disabled");
+  const [loadingSendGreetingMessageOneQueues, setLoadingSendGreetingMessageOneQueues] = useState(false);
 
   const { update } = useSettings();
 
@@ -149,37 +152,42 @@ export default function Options(props) {
       if (SettingsTransfTicket) {
         setSettingsTransfTicket(SettingsTransfTicket.value);
       }
-	  {/*TRANSFERIR TICKET*/}	
+	  {/*TRANSFERIR TICKET*/}
+
+      const sendGreetingMessageOneQueues = settings.find((s) => s.key === "sendGreetingMessageOneQueues");
+      if (sendGreetingMessageOneQueues) {
+        setSendGreetingMessageOneQueues(sendGreetingMessageOneQueues.value)
+      }	  
 	  
       const chatbotType = settings.find((s) => s.key === "chatBotType");
       if (chatbotType) {
         setChatbotType(chatbotType.value);
       }
 
-      const ipixcType = settings.find((s) => s.key === "ipixc");
+	    {/*const ipixcType = settings.find((s) => s.key === "ipixc");
       if (ipixcType) {
         setIpIxcType(ipixcType.value);
-      }
+      }*/}
 
-      const tokenixcType = settings.find((s) => s.key === "tokenixc");
+      {/*const tokenixcType = settings.find((s) => s.key === "tokenixc");
       if (tokenixcType) {
         setTokenIxcType(tokenixcType.value);
-      }
+      }*/}
 
-      const ipmkauthType = settings.find((s) => s.key === "ipmkauth");
+      {/*const ipmkauthType = settings.find((s) => s.key === "ipmkauth");
       if (ipmkauthType) {
         setIpMkauthType(ipmkauthType.value);
-      }
+      }*/}
 
-      const clientidmkauthType = settings.find((s) => s.key === "clientidmkauth");
+     {/* const clientidmkauthType = settings.find((s) => s.key === "clientidmkauth");
       if (clientidmkauthType) {
         setClientIdMkauthType(clientidmkauthType.value);
-      }
+      }*/}
 
-      const clientsecretmkauthType = settings.find((s) => s.key === "clientsecretmkauth");
+      {/*const clientsecretmkauthType = settings.find((s) => s.key === "clientsecretmkauth");
       if (clientsecretmkauthType) {
         setClientSecrectMkauthType(clientsecretmkauthType.value);
-      }
+      }*/}
 
       const asaasType = settings.find((s) => s.key === "asaas");
       if (asaasType) {
@@ -198,6 +206,17 @@ export default function Options(props) {
     });
     toast.success("Operação atualizada com sucesso.");
     setLoadingUserRating(false);
+  }
+  
+    async function handleSendGreetingMessageOneQueues(value) {
+    setSendGreetingMessageOneQueues(value);
+    setLoadingSendGreetingMessageOneQueues(true);
+    await update({
+      key: "sendGreetingMessageOneQueues",
+      value,
+    });
+	toast.success("Operação atualizada com sucesso.");
+    setLoadingSendGreetingMessageOneQueues(false);
   }
 
   async function handleScheduleType(value) {
@@ -286,7 +305,7 @@ export default function Options(props) {
     setLoadingSettingsTransfTicket(false);
   } 
  
-  async function handleChangeIPIxc(value) {
+ {/*async function handleChangeIPIxc(value) {
     setIpIxcType(value);
     setLoadingIpIxcType(true);
     await update({
@@ -297,7 +316,7 @@ export default function Options(props) {
     setLoadingIpIxcType(false);
   }
 
-  async function handleChangeTokenIxc(value) {
+   {/*async function handleChangeTokenIxc(value) {
     setTokenIxcType(value);
     setLoadingTokenIxcType(true);
     await update({
@@ -339,7 +358,7 @@ export default function Options(props) {
     });
     toast.success("Operação atualizada com sucesso.");
     setLoadingClientSecrectMkauthType(false);
-  }
+  }*/}
 
   async function handleChangeAsaas(value) {
     setAsaasType(value);
@@ -498,6 +517,26 @@ export default function Options(props) {
           </FormControl>
         </Grid>
 		
+		{/* ENVIAR SAUDAÇÃO QUANDO HOUVER SOMENTE 1 FILA */}
+        <Grid xs={12} sm={6} md={4} item>
+          <FormControl className={classes.selectContainer}>
+            <InputLabel id="sendGreetingMessageOneQueues-label">Enviar saudação quando houver somente 1 fila</InputLabel>
+            <Select
+              labelId="sendGreetingMessageOneQueues-label"
+              value={sendGreetingMessageOneQueues}
+              onChange={async (e) => {
+                handleSendGreetingMessageOneQueues(e.target.value);
+              }}
+            >
+              <MenuItem value={"disabled"}>Desabilitado</MenuItem>
+              <MenuItem value={"enabled"}>Habilitado</MenuItem>
+            </Select>
+            <FormHelperText>
+              {loadingSendGreetingMessageOneQueues && "Atualizando..."}
+            </FormHelperText>
+          </FormControl>
+        </Grid>
+		
       </Grid>
       <Grid spacing={3} container>
         <Tabs
@@ -518,6 +557,131 @@ export default function Options(props) {
         </Tabs>
 
       </Grid>
+      {/*-----------------IXC DESATIVADO 4.6.5-----------------*/}
+      {/*<Grid spacing={3} container
+        style={{ marginBottom: 10 }}>
+        <Tabs
+          indicatorColor="primary"
+          textColor="primary"
+          scrollButtons="on"
+          variant="scrollable"
+          className={classes.tab}
+        >
+          <Tab
+
+            label="IXC" />
+
+        </Tabs>
+        <Grid xs={12} sm={6} md={6} item>
+          <FormControl className={classes.selectContainer}>
+            <TextField
+              id="ipixc"
+              name="ipixc"
+              margin="dense"
+              label="IP do IXC"
+              variant="outlined"
+              value={ipixcType}
+              onChange={async (e) => {
+                handleChangeIPIxc(e.target.value);
+              }}
+            >
+            </TextField>
+            <FormHelperText>
+              {loadingIpIxcType && "Atualizando..."}
+            </FormHelperText>
+          </FormControl>
+        </Grid>
+        <Grid xs={12} sm={6} md={6} item>
+          <FormControl className={classes.selectContainer}>
+            <TextField
+              id="tokenixc"
+              name="tokenixc"
+              margin="dense"
+              label="Token do IXC"
+              variant="outlined"
+              value={tokenixcType}
+              onChange={async (e) => {
+                handleChangeTokenIxc(e.target.value);
+              }}
+            >
+            </TextField>
+            <FormHelperText>
+              {loadingTokenIxcType && "Atualizando..."}
+            </FormHelperText>
+          </FormControl>
+        </Grid>
+      </Grid>*/}
+      {/*-----------------MK-AUTH DESATIVADO 4.6.5-----------------*/}
+      {/*<Grid spacing={3} container
+        style={{ marginBottom: 10 }}>
+        <Tabs
+          indicatorColor="primary"
+          textColor="primary"
+          scrollButtons="on"
+          variant="scrollable"
+          className={classes.tab}
+        >
+          <Tab label="MK-AUTH" />
+
+        </Tabs>
+        <Grid xs={12} sm={12} md={4} item>
+          <FormControl className={classes.selectContainer}>
+            <TextField
+              id="ipmkauth"
+              name="ipmkauth"
+              margin="dense"
+              label="Ip Mk-Auth"
+              variant="outlined"
+              value={ipmkauthType}
+              onChange={async (e) => {
+                handleChangeIpMkauth(e.target.value);
+              }}
+            >
+            </TextField>
+            <FormHelperText>
+              {loadingIpMkauthType && "Atualizando..."}
+            </FormHelperText>
+          </FormControl>
+        </Grid>
+        <Grid xs={12} sm={12} md={4} item>
+          <FormControl className={classes.selectContainer}>
+            <TextField
+              id="clientidmkauth"
+              name="clientidmkauth"
+              margin="dense"
+              label="Client Id"
+              variant="outlined"
+              value={clientidmkauthType}
+              onChange={async (e) => {
+                handleChangeClientIdMkauth(e.target.value);
+              }}
+            >
+            </TextField>
+            <FormHelperText>
+              {loadingClientIdMkauthType && "Atualizando..."}
+            </FormHelperText>
+          </FormControl>
+        </Grid>
+        <Grid xs={12} sm={12} md={4} item>
+          <FormControl className={classes.selectContainer}>
+            <TextField
+              id="clientsecretmkauth"
+              name="clientsecretmkauth"
+              margin="dense"
+              label="Client Secret"
+              variant="outlined"
+              value={clientsecretmkauthType}
+              onChange={async (e) => {
+                handleChangeClientSecrectMkauth(e.target.value);
+              }}
+            >
+            </TextField>
+            <FormHelperText>
+              {loadingClientSecrectMkauthType && "Atualizando..."}
+            </FormHelperText>
+          </FormControl>
+        </Grid>
+      </Grid>*/}
       {/*-----------------ASAAS-----------------*/}
       <Grid spacing={3} container
         style={{ marginBottom: 10 }}>

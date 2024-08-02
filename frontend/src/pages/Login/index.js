@@ -10,9 +10,9 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-
+import { versionSystem } from "../../../package.json";
 import { i18n } from "../../translate/i18n";
-
+import { nomeEmpresa } from "../../../package.json";
 import { AuthContext } from "../../context/Auth/AuthContext";
 import logo from "../../assets/logo.png";
 
@@ -22,7 +22,7 @@ const Copyright = () => {
 		<Typography variant="body2" color="primary" align="center">
 			{"Copyright "}
  			<Link color="primary" href="#">
- 				PLW
+ 				{ nomeEmpresa } - v { versionSystem }
  			</Link>{" "}
  			{new Date().getFullYear()}
  			{"."}
@@ -34,8 +34,9 @@ const useStyles = makeStyles(theme => ({
 	root: {
 		width: "100vw",
 		height: "100vh",
-		background: "linear-gradient(to right, #6D30EF , #6D30EF , #4C21A7)", //cor de fundo 
-		//backgroundImage: "url(https://#)",
+		//background: "linear-gradient(to right, #682EE3 , #682EE3 , #682EE3)",
+		//backgroundImage: "url(https://i.imgur.com/CGby9tN.png)",
+		backgroundColor: theme.palette.primary.main,
 		backgroundRepeat: "no-repeat",
 		backgroundSize: "100% 100%",
 		backgroundPosition: "center",
@@ -46,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 		textAlign: "center",
 	},
 	paper: {
-		backgroundColor: theme.palette.login, //DARK MODE PLW DESIGN//
+		backgroundColor: theme.palette.login,
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",
@@ -85,13 +86,14 @@ const Login = () => {
 		handleLogin(user);
 	};
 
+	
 	return (
 		<div className={classes.root}>
 		<Container component="main" maxWidth="xs">
 			<CssBaseline/>
 			<div className={classes.paper}>
 				<div>
-					<center><img style={{ margin: "0 auto", width: "70%" }} src={logo} alt="Logologin" /></center>
+					<img style={{ margin: "0 auto", width: "70%" }} src={logo} alt="Whats" />
 				</div>
 				{/*<Typography component="h1" variant="h5">
 					{i18n.t("login.title")}
@@ -123,6 +125,15 @@ const Login = () => {
 						onChange={handleChangeInput}
 						autoComplete="current-password"
 					/>
+					
+					{/* <Grid container justify="flex-end">
+					  <Grid item xs={6} style={{ textAlign: "right" }}>
+						<Link component={RouterLink} to="/forgetpsw" variant="body2">
+						  Esqueceu sua senha?
+						</Link>
+					  </Grid>
+					</Grid>*/}
+					
 					<Button
 						type="submit"
 						fullWidth
@@ -147,8 +158,7 @@ const Login = () => {
 				</form>
 			
 			</div>
-			
-			
+			<Box mt={8}><Copyright /></Box>
 		</Container>
 		</div>
 	);
